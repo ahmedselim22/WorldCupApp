@@ -1,25 +1,32 @@
 package com.selim.worldcupapp.ui
 
+import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
+import android.widget.TextView
+import com.selim.worldcupapp.R
 import com.selim.worldcupapp.data.DataManager
 import com.selim.worldcupapp.adapter.MatchAdapter
+import com.selim.worldcupapp.data.ItemClickListener
+import com.selim.worldcupapp.data.domain.Match
 import com.selim.worldcupapp.databinding.ActivityMainBinding
 import com.selim.worldcupapp.util.CsvParser
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() ,ItemClickListener{
     lateinit var binding:ActivityMainBinding
     val TAG = "MAIN_ACTIVITY"
+    var match: Match?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         parseFile()
         val matches = DataManager.matches
-        val adapter = MatchAdapter(matches)
+        val adapter = MatchAdapter(this,matches,this)
         binding.mainRv.adapter = adapter
 
 //        binding.ivNext.setOnClickListener {
@@ -41,6 +48,35 @@ class MainActivity : AppCompatActivity() {
         }
 //        bindMatches(DataManager.getCurrentMatch())
     }
+
+    override fun onClickItem(match: Match) {
+        super.onClickItem(match)
+        this.match =match
+        showDialog(match)
+    }
+
+    private fun showDialog(match: Match){
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.match_details_layout)
+        dialog.findViewById<TextView>(R.id.details_tv_year).text=match.year.toString()
+        dialog.findViewById<TextView>(R.id.details_tv_stadium).text = match.stadium
+        dialog.findViewById<TextView>(R.id.details_tv_city).text = match.city
+        dialog.findViewById<TextView>(R.id.details_tv_assistant1).text = match.assistant1
+        dialog.findViewById<TextView>(R.id.details_tv_assistant2).text = match.assistant2
+        dialog.findViewById<TextView>(R.id.details_tv_attendence).text = match.attendance
+        dialog.findViewById<TextView>(R.id.details_tv_awayTeam).text = match.awayTeam
+        dialog.findViewById<TextView>(R.id.details_tv_homeTeam).text = match.homeTeam
+        dialog.findViewById<TextView>(R.id.details_tv_awayTeamGoals).text = match.awayTeamGoals.toString()
+        dialog.findViewById<TextView>(R.id.details_tv_homeTeamGoals).text = match.homeTeamGoals.toString()
+        dialog.findViewById<TextView>(R.id.details_tv_dateTime).text = match.dateTime
+        dialog.findViewById<TextView>(R.id.details_tv_referee).text = match.referee
+        dialog.findViewById<ImageView>(R.id.details_iv_close).setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+
 //    fun bindMatches(match: Match){
 //        binding.tvYear.text = match.year.toString()
 //        binding.tvStadium.text = match.stadium

@@ -1,15 +1,18 @@
 package com.selim.worldcupapp.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.selim.worldcupapp.R
+import com.selim.worldcupapp.data.ItemClickListener
 import com.selim.worldcupapp.data.domain.Match
 import com.selim.worldcupapp.databinding.ListItemLayoutBinding
 
-class MatchAdapter(val list: List<Match>) : RecyclerView.Adapter<MatchAdapter.MatchViewHolder>() {
+class MatchAdapter(val context :Context,val list: List<Match>,val listener:ItemClickListener) : RecyclerView.Adapter<MatchAdapter.MatchViewHolder>() {
 
     class MatchViewHolder(itemView: View) : ViewHolder(itemView) {
         val binding =ListItemLayoutBinding.bind(itemView)
@@ -28,13 +31,16 @@ class MatchAdapter(val list: List<Match>) : RecyclerView.Adapter<MatchAdapter.Ma
     override fun onBindViewHolder(holder: MatchViewHolder, position: Int) {
         val match = list[position]
         holder.binding.apply {
-            tvCity.text = match.city
             tvYear.text = match.year.toString()
             tvStadium.text = match.stadium
             tvHomeTeam.text = match.homeTeam
             tvAwayTeam.text = match.awayTeam
             tvHomeTeamGoals.text = match.homeTeamGoals.toString()
             tvAwayTeamGoals.text = match.awayTeamGoals.toString()
+            cardItem.setOnClickListener {
+                Toast.makeText(context, match.homeTeam+"", Toast.LENGTH_SHORT).show()
+                listener.onClickItem(match)
+            }
         }
     }
 }

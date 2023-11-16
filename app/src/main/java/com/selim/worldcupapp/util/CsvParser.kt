@@ -12,7 +12,12 @@ class CsvParser {
             homeTeam = tokens[Constants.ColumnIndex.HOME_TEAM],
             awayTeam = tokens[Constants.ColumnIndex.AWAY_TEAM],
             homeTeamGoals = tokens[Constants.ColumnIndex.HOME_TEAM_GOALS].toInt(),
-            awayTeamGoals = tokens[Constants.ColumnIndex.AWAY_TEAM_GOALS].toInt()
+            awayTeamGoals = tokens[Constants.ColumnIndex.AWAY_TEAM_GOALS].toInt(),
+            dateTime = tokens[Constants.ColumnIndex.DATE_TIME],
+            attendance = tokens[Constants.ColumnIndex.ATTENDANCE],
+            referee = tokens[Constants.ColumnIndex.REFEREE],
+            assistant1 = tokens[Constants.ColumnIndex.ASSISTANT_1],
+            assistant2 = tokens[Constants.ColumnIndex.ASSISTANT_2]
         )
     }
 }

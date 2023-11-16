@@ -6,6 +6,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="@dimen/_10sdp"
     app:cardCornerRadius="@dimen/_20ssp"
+    android:id="@+id/card_item"
+    app:cardElevation="@dimen/_20sdp"
     android:elevation="@dimen/_10sdp"
     >
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,25 +15,13 @@
         android:layout_height="match_parent"
         >
 
-        <TextView
-            android:id="@+id/tv_year"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="@dimen/_4sdp"
-            android:text="1990"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:textSize="@dimen/_14ssp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_city"
+            android:id="@+id/tv_year"
             android:layout_width="@dimen/_100sdp"
             android:layout_height="wrap_content"
             android:padding="@dimen/_4sdp"
-            android:text="city"
+            android:text="1890"
             android:gravity="center"
             android:textSize="@dimen/_14ssp"
             app:layout_constraintBottom_toTopOf="@+id/textView"
