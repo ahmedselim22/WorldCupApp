@@ -4,8 +4,8 @@ import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.View
+import android.widget.*
 import com.selim.worldcupapp.R
 import com.selim.worldcupapp.data.DataManager
 import com.selim.worldcupapp.adapter.MatchAdapter
@@ -20,14 +20,26 @@ class MainActivity : AppCompatActivity() ,ItemClickListener{
     lateinit var binding:ActivityMainBinding
     val TAG = "MAIN_ACTIVITY"
     var match: Match?=null
+    lateinit var adapter:MatchAdapter
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         parseFile()
-        val matches = DataManager.matches
-        val adapter = MatchAdapter(this,matches,this)
+        adapter = MatchAdapter(this,DataManager.matches,this)
         binding.mainRv.adapter = adapter
+
+        binding.fabAdd.setOnClickListener {
+            showAddMatchDialog()
+//            val fragment =AddMatchFragment()
+//            val transaction= supportFragmentManager.beginTransaction()
+//            val view = findViewById<FrameLayout>(R.id.fragment_container)
+//            view.visibility= View.VISIBLE
+//            transaction.replace(R.id.fragment_container,fragment)
+//            transaction.commit()
+        }
 
 //        binding.ivNext.setOnClickListener {
 //            bindMatches(DataManager.getNextMatch())
@@ -35,6 +47,15 @@ class MainActivity : AppCompatActivity() ,ItemClickListener{
 //        binding.ivPrevious.setOnClickListener {
 //            bindMatches(DataManager.getPreviousMatch())
 //        }
+    }
+    fun addMatch(match:Match){
+//        val m = Match(
+//            2020,"cairo","qatar stadium","argantina","france"
+//            ,4,3,"22-8-2020","78322",
+//            "asdasd","asdsd","asdsd"
+//        )
+        DataManager.addMatch(match)
+        adapter.setData(DataManager.matches)
     }
     private fun parseFile(){
         val inputStream = assets.open("worldcup.csv")
@@ -52,10 +73,14 @@ class MainActivity : AppCompatActivity() ,ItemClickListener{
     override fun onClickItem(match: Match) {
         super.onClickItem(match)
         this.match =match
-        showDialog(match)
+        showMatchDetailsDialog(match)
+    }
+    override fun deleteItem(index: Int) {
+        DataManager.removeMatchAt(index)
+        adapter.setData(DataManager.matches)
     }
 
-    private fun showDialog(match: Match){
+    private fun showMatchDetailsDialog(match: Match){
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.match_details_layout)
         dialog.findViewById<TextView>(R.id.details_tv_year).text=match.year.toString()
@@ -75,6 +100,46 @@ class MainActivity : AppCompatActivity() ,ItemClickListener{
         }
         dialog.show()
     }
+
+    private fun showAddMatchDialog(){
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.add_match_layout)
+        val et_year =  dialog.findViewById<EditText>(R.id.addMatch_et_year)
+        val et_city =  dialog.findViewById<EditText>(R.id.addMatch_et_city)
+        val et_stadium =  dialog.findViewById<EditText>(R.id.addMatch_et_stadium)
+        val et_dateTime =  dialog.findViewById<EditText>(R.id.addMatch_et_dateTime)
+        val et_homeTeam =  dialog.findViewById<EditText>(R.id.addMatch_et_homeTeam)
+        val et_awayTeam =  dialog.findViewById<EditText>(R.id.addMatch_et_awayTeam)
+        val et_hoemGoals =  dialog.findViewById<EditText>(R.id.addMatch_et_homeTeamGoals)
+        val et_awayGoals =  dialog.findViewById<EditText>(R.id.addMatch_et_awayTeamGoals)
+        val et_referee =  dialog.findViewById<EditText>(R.id.addMatch_et_referee)
+        val et_assistant1 =  dialog.findViewById<EditText>(R.id.addMatch_et_assistant1)
+        val et_assistant2 =  dialog.findViewById<EditText>(R.id.addMatch_et_assistant2)
+        val et_attendance =  dialog.findViewById<EditText>(R.id.addMatch_et_attendance)
+        val btn_add =  dialog.findViewById<Button>(R.id.addMatch_btn_add)
+        btn_add.setOnClickListener {
+            val match=Match(
+                year = et_year.text.toString().toInt(),
+                city = et_city.text.toString(),
+                stadium = et_stadium.text.toString(),
+                homeTeam = et_homeTeam.text.toString(),
+                awayTeam = et_awayTeam.text.toString(),
+                homeTeamGoals = et_hoemGoals.text.toString().toInt(),
+                awayTeamGoals = et_awayGoals.text.toString().toInt(),
+                dateTime = et_dateTime.text.toString(),
+                referee = et_referee.text.toString(),
+                attendance = et_attendance.text.toString(),
+                assistant1 = et_assistant1.text.toString(),
+                assistant2 = et_assistant2.text.toString()
+            )
+            DataManager.addMatch(match)
+            adapter.setData(DataManager.matches)
+            Toast.makeText(this,"added",Toast.LENGTH_LONG).show()
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
 
 
 //    fun bindMatches(match: Match){

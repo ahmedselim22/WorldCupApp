@@ -3,14 +3,17 @@ package com.selim.worldcupapp.data
 import com.selim.worldcupapp.data.domain.Match
 
 object DataManager {
-    val matchesList = mutableListOf<Match>()
+    private val matchesList = mutableListOf<Match>()
     var currentMatchIndex =0
 
     val matches :List<Match>
         get() = matchesList
-
     fun addMatch(match: Match){
         matchesList.add(match)
+    }
+
+    fun removeMatchAt(index:Int){
+        matchesList.removeAt(index)
     }
 //    fun getCurrentMatch():Match{
 //        return matchesList[currentMatchIndex]

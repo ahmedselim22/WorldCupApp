@@ -7,12 +7,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.google.android.material.snackbar.Snackbar
 import com.selim.worldcupapp.R
+import com.selim.worldcupapp.data.DataManager
 import com.selim.worldcupapp.data.ItemClickListener
 import com.selim.worldcupapp.data.domain.Match
 import com.selim.worldcupapp.databinding.ListItemLayoutBinding
 
-class MatchAdapter(val context :Context,val list: List<Match>,val listener:ItemClickListener) : RecyclerView.Adapter<MatchAdapter.MatchViewHolder>() {
+class MatchAdapter(private val context :Context,private var list: List<Match>,private val listener:ItemClickListener) : RecyclerView.Adapter<MatchAdapter.MatchViewHolder>() {
 
     class MatchViewHolder(itemView: View) : ViewHolder(itemView) {
         val binding =ListItemLayoutBinding.bind(itemView)
@@ -28,6 +30,11 @@ class MatchAdapter(val context :Context,val list: List<Match>,val listener:ItemC
         return list.size
     }
 
+     fun setData(list:List<Match>){
+        this.list=list
+        notifyDataSetChanged()
+    }
+
     override fun onBindViewHolder(holder: MatchViewHolder, position: Int) {
         val match = list[position]
         holder.binding.apply {
@@ -38,8 +45,10 @@ class MatchAdapter(val context :Context,val list: List<Match>,val listener:ItemC
             tvHomeTeamGoals.text = match.homeTeamGoals.toString()
             tvAwayTeamGoals.text = match.awayTeamGoals.toString()
             cardItem.setOnClickListener {
-                Toast.makeText(context, match.homeTeam+"", Toast.LENGTH_SHORT).show()
                 listener.onClickItem(match)
+            }
+            ivDelete.setOnClickListener{
+                listener.deleteItem(position)
             }
         }
     }
