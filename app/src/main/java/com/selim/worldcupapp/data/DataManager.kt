@@ -7,9 +7,12 @@ object DataManager {
     var currentMatchIndex =0
 
     val matches :List<Match>
-        get() = matchesList
+        get() = matchesList.toList()
     fun addMatch(match: Match){
         matchesList.add(match)
+    }
+    fun addMatchAt(index: Int,match: Match){
+        matchesList.add(index,match)
     }
 
     fun removeMatchAt(index:Int){
